@@ -91,20 +91,6 @@ class UsersController extends Controller
     {
         $view = 'emails.confirm';
         $data = compact('user');
-        $from = 'summer@example.com';
-        $name = 'Summer';
-        $to = $user->email;
-        $subject = "感谢注册 Weibo 应用！请确认你的邮箱。";
-
-        Mail::send($view, $data, function ($message) use ($from, $name, $to, $subject) {
-            $message->from($from, $name)->to($to)->subject($subject);
-        });
-    }
-
-    protected function sendEmailConfirmationTo($user)
-    {
-        $view = 'emails.confirm';
-        $data = compact('user');
         $to = $user->email;
         $subject = "感谢注册 Weibo 应用！请确认你的邮箱。";
 
