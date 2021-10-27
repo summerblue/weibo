@@ -2,6 +2,7 @@
 version: '3'
 services:
     laravel.test:
+        container_name: laravel.test
         build:
             context: ./vendor/laravel/sail/runtimes/8.0
             dockerfile: Dockerfile
@@ -16,7 +17,9 @@ services:
         volumes:
             - '.:/var/www/html'
         networks:
-            - sail
+            sail:
+              aliases:
+                  - weibo.test
         depends_on:
             - mysql
             - redis
@@ -30,19 +33,21 @@ services:
     #     depends_on:
     #         - laravel.test
     mysql:
+        container_name: weibo.mysql
         image: 'mysql:8.0'
         ports:
             - '${FORWARD_DB_PORT:-3306}:3306'
         environment:
             MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
             MYSQL_DATABASE: '${DB_DATABASE}'
-            MYSQL_USER: '${DB_USERNAME}'
             MYSQL_PASSWORD: '${DB_PASSWORD}'
             MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
         volumes:
             - 'sailmysql:/var/lib/mysql'
         networks:
-            - sail
+            sail:
+              aliases:
+                  - weibo.mysql
     redis:
         image: 'redis:alpine'
         ports:
@@ -50,7 +55,9 @@ services:
         volumes:
             - 'sailredis:/data'
         networks:
-            - sail
+            sail:
+              aliases:
+                    - weibo.redis
     # memcached:
     #     image: 'memcached:alpine'
     #     ports:
@@ -58,12 +65,15 @@ services:
     #     networks:
     #         - sail
     mailhog:
+        container_name: weibo.mailhog
         image: 'mailhog/mailhog:latest'
         ports:
             - 1025:1025
             - 8025:8025
         networks:
-            - sail
+            sail:
+              aliases:
+                    - weibo.mailhog
 networks:
     sail:
         driver: bridge
