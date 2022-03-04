@@ -57,4 +57,9 @@ class User extends Authenticatable
         $hash = md5(strtolower(trim($this->attributes['email'])));
         return "http://cdn.v2ex.com/gravatar/$hash?s=$size";
     }
+
+    public function statuses()
+    {
+        return $this->hasMany(Status::class);
+    }
 }
